@@ -6,11 +6,11 @@
   --bg: #060606;
   --bg-2: #0b0b0b;
   --ink: #e6e1d6;
-  --dim: #8a857b;
-  --faint: #55514a;
+  --dim: #9a948a;
+  --faint: #8f8a80;
   --line: #232323;
   --red: #ff2a2a;
-  --red-dim: #a32020;
+  --red-dim: #e04545;
   --glow: rgba(255, 42, 42, .55);
   --grain: rgba(255, 255, 255, .028);
   --header-h: 3.6rem;
@@ -20,10 +20,10 @@
   --bg: #ece7db;
   --bg-2: #e3ddcf;
   --ink: #16130f;
-  --dim: #6b6055;
-  --faint: #a89d8e;
+  --dim: #5f5549;
+  --faint: #665c50;
   --line: #c9c1b0;
-  --red: #c11616;
+  --red: #b01212;
   --red-dim: #8a1414;
   --glow: rgba(193, 22, 22, .35);
   --grain: rgba(0, 0, 0, .03);
@@ -248,7 +248,7 @@ pre.ascii span.glitch { color: var(--red); }
 
 /* ── neon sign headline ── */
 .hero h1.neon {
-  font-family: "Monoton", "DotGothic16", ui-monospace, monospace;
+  font-family: "Monoton", ui-monospace, monospace;
   font-weight: 400;
   font-size: clamp(2.4rem, 12.5vw, 7.4rem);
   letter-spacing: .06em;
@@ -280,8 +280,8 @@ pre.ascii span.glitch { color: var(--red); }
   animation: cue 2.4s ease-in-out infinite;
 }
 @keyframes cue {
-  0%, 100% { transform: translateY(0); opacity: .5; }
-  50%      { transform: translateY(6px); opacity: 1; }
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(6px); }
 }
 
 /* ── cards / posts ── */
@@ -426,7 +426,7 @@ footer {
   gap: 2rem;
   justify-content: space-between;
 }
-.foot-cols h4 {
+.foot-cols h3 {
   font-family: ui-monospace, Menlo, Consolas, monospace;
   font-size: .64rem;
   font-weight: 600;
