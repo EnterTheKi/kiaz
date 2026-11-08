@@ -747,4 +747,6 @@ nav a:active, #themeToggle:active, .lb-close:active,
   .drawer > summary { grid-template-columns: 3rem 1fr auto; gap: .8rem; padding: 1.1rem 0; }
   .lb-bar { flex-wrap: wrap; row-gap: .5rem; }
   .lb-cap { font-size: .6rem; }
+  /* declared here, after the desktop .lb-nav rules, so 44px wins */
+  .lb-nav button { width: 44px; height: 44px; }
 }
