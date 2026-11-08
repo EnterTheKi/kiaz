@@ -13,6 +13,7 @@
   --red-dim: #a32020;
   --glow: rgba(255, 42, 42, .55);
   --grain: rgba(255, 255, 255, .028);
+  --header-h: 3.6rem;
 }
 
 [data-theme="light"] {
@@ -33,7 +34,7 @@
 html { scroll-behavior: smooth; }
 
 /* anchor targets clear the sticky header */
-[id] { scroll-margin-top: 4.6rem; }
+[id] { scroll-margin-top: calc(var(--header-h) + 1rem); }
 
 /* red-ink selection — highlight on carbon paper */
 ::selection { background: var(--red); color: var(--bg); }
@@ -225,7 +226,8 @@ pre.ascii span.glitch { color: var(--red); }
 
 /* ── hero ── */
 .hero {
-  min-height: calc(100vh - 60px);
+  min-height: calc(100vh - var(--header-h));
+  min-height: calc(100svh - var(--header-h));
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -546,6 +548,15 @@ footer {
   .foot-cols { grid-template-columns: repeat(3, 1fr); gap: 1rem; }
   .foot-art { display: none; }
   .foot-bar .bar-in { padding: 1.1rem; }
+
+  /* a wrapped two-row header is taller than the 60px desktop offset */
+  :root { --header-h: 6.4rem; }
+
+  /* 44px minimum touch targets */
+  nav a { min-height: 44px; display: inline-flex; align-items: center; }
+  #themeToggle { min-height: 44px; display: inline-flex; align-items: center; }
+  .lb-close { min-height: 44px; display: inline-flex; align-items: center; }
+  .lb-nav button { width: 44px; height: 44px; }
 }
 @media (max-width: 560px) {
   pre.ascii { font-size: .5rem; }
@@ -591,7 +602,7 @@ footer {
   vertical-align: .12em;
 }
 .d-hint {
-  color: var(--faint);
+  color: var(--dim);
   font-size: .62rem;
   letter-spacing: .28em;
   text-transform: uppercase;
@@ -669,7 +680,7 @@ body.lb-open { overflow: hidden; }
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  padding: .85rem 1.4rem;
+  padding: calc(.85rem + env(safe-area-inset-top, 0px)) 1.4rem .85rem;
   border-bottom: 1px solid var(--line);
 }
 .lb-close {
@@ -699,13 +710,13 @@ body.lb-open { overflow: hidden; }
   display: flex;
   align-items: baseline;
   gap: 1.2rem;
-  padding: .8rem 1.4rem;
+  padding: .8rem 1.4rem calc(.8rem + env(safe-area-inset-bottom, 0px));
   border-top: 1px solid var(--line);
   font-size: .66rem;
   letter-spacing: .2em;
 }
 .lb-cap { flex: 1; color: var(--ink); text-transform: uppercase; }
-.lb-count { color: var(--faint); white-space: nowrap; }
+.lb-count { color: var(--dim); white-space: nowrap; }
 .lb-nav { display: flex; gap: .45rem; }
 .lb-nav button {
   width: 2.4rem;
@@ -722,6 +733,14 @@ body.lb-open { overflow: hidden; }
   border-color: var(--red-dim);
 }
 .lb-nav button:disabled { opacity: .28; cursor: default; }
+
+/* touch feedback — hover alone does not register on phones */
+nav a:active, #themeToggle:active, .lb-close:active,
+.lb-nav button:not(:disabled):active, .drawer > summary:active {
+  color: var(--red);
+  border-color: var(--red-dim);
+}
+.shot:active img { filter: none; opacity: 1; }
 
 @media (max-width: 700px) {
   .sheet { columns: 2 8rem; }

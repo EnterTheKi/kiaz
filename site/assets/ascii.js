@@ -4,12 +4,21 @@
   "use strict";
 
   /* theme toggle */
+  var themeMeta = document.querySelector('meta[name="theme-color"]');
+  function paintChrome() {
+    if (!themeMeta) return;
+    themeMeta.setAttribute("content",
+      document.documentElement.getAttribute("data-theme") === "light" ? "#ece7db" : "#060606");
+  }
+  paintChrome();
+
   var btn = document.getElementById("themeToggle");
   if (btn) {
     btn.addEventListener("click", function () {
       var root = document.documentElement;
       var next = root.getAttribute("data-theme") === "light" ? "dark" : "light";
       root.setAttribute("data-theme", next);
+      paintChrome();
       try { localStorage.setItem("kiazaki-theme", next); } catch (e) {}
     });
   }
@@ -112,8 +121,7 @@
     }
   }
 
-  /* footer glyph — the Watcher, shared across all pages */
-  var footOwl = document.getElementById("footOwl");
+  /* footer glyph — the Watcher, shared across all pages */    var footOwl = document.getElementById("footOwl");
   if (footOwl) {
     footOwl.innerHTML = [
       "             ##   ##########   ##",
