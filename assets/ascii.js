@@ -275,3 +275,100 @@
     });
   })();
 })();
+
+/* ── the vault — open a frame, step through with ← →, close with esc ── */
+(function () {
+  "use strict";
+
+  var lb = document.getElementById("lightbox");
+  if (!lb) return;
+
+  var img = document.getElementById("lbImg");
+  var cap = document.getElementById("lbCap");
+  var num = document.getElementById("lbNum");
+  var prev = document.getElementById("lbPrev");
+  var next = document.getElementById("lbNext");
+  var closeBtn = document.getElementById("lbClose");
+
+  var frames = [];   /* the open drawer's frames, in order */
+  var at = -1;
+  var opener = null; /* the frame to hand focus back to */
+
+  function pad(n) { return (n < 10 ? "0" : "") + n; }
+
+  function show(i) {
+    if (!frames.length) return;
+    if (i < 0) i = 0;
+    if (i > frames.length - 1) i = frames.length - 1;
+    at = i;
+
+    var shot = frames[at];
+    img.src = shot.getAttribute("data-full");
+    img.alt = shot.getAttribute("data-cap") || "";
+    cap.textContent = shot.getAttribute("data-cap") || "";
+    num.textContent = pad(at + 1) + " / " + pad(frames.length);
+    prev.disabled = at === 0;
+    next.disabled = at === frames.length - 1;
+  }
+
+  function open(shot) {
+    var sheet = shot.parentNode;
+    frames = Array.prototype.slice.call(sheet.querySelectorAll(".shot"));
+    at = frames.indexOf(shot);
+    opener = shot;
+
+    lb.hidden = false;
+    lb.setAttribute("aria-hidden", "false");
+    document.body.classList.add("lb-open");
+    show(at);
+    closeBtn.focus();
+  }
+
+  function shut() {
+    lb.hidden = true;
+    lb.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("lb-open");
+    img.removeAttribute("src");
+    img.alt = "";
+    if (opener) opener.focus();
+  }
+
+  Array.prototype.forEach.call(document.querySelectorAll(".shot"), function (shot) {
+    shot.addEventListener("click", function () { open(shot); });
+  });
+
+  prev.addEventListener("click", function () { show(at - 1); });
+  next.addEventListener("click", function () { show(at + 1); });
+  closeBtn.addEventListener("click", shut);
+
+  /* click the dark stage to dismiss, never the frame itself */
+  lb.addEventListener("click", function (ev) {
+    if (ev.target === lb || (ev.target.classList && ev.target.classList.contains("lb-stage"))) shut();
+  });
+
+  document.addEventListener("keydown", function (ev) {
+    if (lb.hidden) return;
+
+    if (ev.key === "Escape") {
+      ev.preventDefault();
+      shut();
+    } else if (ev.key === "ArrowLeft") {
+      ev.preventDefault();
+      show(at - 1);
+    } else if (ev.key === "ArrowRight") {
+      ev.preventDefault();
+      show(at + 1);
+    } else if (ev.key === "Tab") {
+      /* keep focus inside the viewer */
+      var ring = [closeBtn, prev, next].filter(function (b) { return !b.disabled; });
+      var first = ring[0], last = ring[ring.length - 1];
+      if (ev.shiftKey && document.activeElement === first) {
+        ev.preventDefault();
+        last.focus();
+      } else if (!ev.shiftKey && document.activeElement === last) {
+        ev.preventDefault();
+        first.focus();
+      }
+    }
+  });
+})();
